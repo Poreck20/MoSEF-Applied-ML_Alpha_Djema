@@ -1,11 +1,11 @@
 [project]
-name = "tp-mosef-ml"
+name = "mosef-applied-ml"
 version = "0.1.0"
-description = "TP for Mosef ML courses"
+description = "MoSEF-Applied-ML"
 authors = [
-    {name = "amedprof",email = "amedprof@gmail.com"}
+    { name = "amedprof", email = "amedprof@gmail.com" }
 ]
-license = {text = "MIT"}
+license = { text = "MIT" }
 readme = "README.md"
 requires-python = ">=3.10,<3.13"
 dependencies = [
@@ -15,11 +15,13 @@ dependencies = [
     "plotly",
     "matplotlib",
     "tqdm",
-    "torch",
     "scikit-learn",
+    "jupyter (>=1.1.1,<2.0.0)",
 ]
-
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+package-mode = false
