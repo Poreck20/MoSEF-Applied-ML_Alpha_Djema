@@ -1,4 +1,34 @@
+import pandas as pd 
+import numpy as np
+
+
+def convert_data_types(df, numeric_cols=None, string_cols=None):
+    """
+    Convertit les colonnes au bon format
+
+    """
+    # Valeurs par défaut
+    if numeric_cols is None:
+        numeric_cols = ['age', 'exp', 'salaire']
+    if string_cols is None:
+        string_cols = ['embauche']
+    
+    # Convertir les colonnes numériques
+    for col in numeric_cols:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+    
+    # Convertir les colonnes string
+    for col in string_cols:
+        if col in df.columns:
+            df[col] = df[col].astype("string")
+    
+    return df
+
+
+
 def display_missing_values(df):
+    """Affiche les valeurs manquantes par type de variable"""
     # Calcul du pourcentage de valeurs manquantes pour chaque colonne
     missing_rate = (df.isnull().sum() / len(df)) * 100
     missing_rate = missing_rate.sort_values(ascending=False)
@@ -12,12 +42,13 @@ def display_missing_values(df):
     print("\n Variables CATÉGORIELLES ")
     display(missing_rate[cat_cols][missing_rate[cat_cols] > 0])
 
-display_missing_values(df)
-# Que pouvez-vous conclure ?
 
-#3) Petite fonction générique
 def impute_target_with_reg(df, target_col, features):
+    """Impute les valeurs manquantes avec régression"""
     # Sépare numériques et catégorielles dans les "features"
+    num_cols_all = df.select_dtypes(include=['number']).columns
+    cat_cols_all = df.select_dtypes(exclude=['number']).columns
+    
     num_feats = [c for c in features if c in num_cols_all]
     cat_feats = [c for c in features if c in cat_cols_all]
 
@@ -50,6 +81,7 @@ def impute_target_with_reg(df, target_col, features):
 
 
 def is_outlier(df, column):
+    """Détecte les outliers avec la méthode IQR"""
     # 1er Quartile 
     Q1 = df[column].quantile(0.25)
     
@@ -69,8 +101,8 @@ def is_outlier(df, column):
     return series
 
 
-
 def missing_summary(df):
+    """Résumé des valeurs manquantes"""
     # Nombre de valeurs manquantes
     nb_missing = df.isnull().sum()
     
@@ -88,6 +120,3 @@ def missing_summary(df):
                            .sort_values(by='Nb_valeurs_manquantes', ascending=False)
     
     return missing_df
-
-# Application
-missing_summary(df)
